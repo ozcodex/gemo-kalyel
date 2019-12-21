@@ -1,4 +1,5 @@
 const roomsList = require('./map.json')
+const words = require('./words.json')
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -72,7 +73,7 @@ readline.question('Kiu estas vi? ', name => {
 function where() {
   const name = playerInfo.name;
   const room = roomsList[playerInfo.currentRoom];
-  console.log(name + ' estas en la ĉambro ' + room.name);
+  console.log(name + ' estas en la ' + room.type + " " + room.name);
 }
 
 // This function moves the player in the given direction
@@ -95,8 +96,9 @@ function lookAround() {
   const room = roomsList[playerInfo.currentRoom];
   // Give a description about the available paths
   for (const direction in room.ways){
-    if (room.ways[direction])
-      console.log("There are a way in " + direction + " direction" )
+    let target = room.ways[direction]
+    if (target)
+      console.log("Estas "+ roomsList[target].type + " en " + words[direction] + " direckto" )
   }
   // Give a description about the items on the room
   if (room.items.length > 0) {
