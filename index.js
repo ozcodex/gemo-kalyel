@@ -128,7 +128,9 @@ function inventory() {
 // This function takes all items in the room and appends to player's inventory
 function takeAllItems() {
   const room = roomList[playerInfo.currentRoom];
-  
+  console.log(playerInfo.inventory);
+  console.log(room.items);
+  //playerInfo.inventory.concat(room.items);
 }
 
 function endGame() {
