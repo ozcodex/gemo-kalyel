@@ -80,8 +80,8 @@ function move() {
   readline.question('kiu direkto vi volas prenu? ', input => {
     const direction = availableDirections[input];
     const room = roomsList[playerInfo.currentRoom];
-    if (direction && room[direction]) {
-      playerInfo.currentRoom = room[direction];
+    if (direction && room.ways[direction]) {
+      playerInfo.currentRoom = room.ways[direction];
       where();
     } else {
       console.log('Ne estas vojo en tio direkto!');

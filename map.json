@@ -2,19 +2,18 @@
   "tst_0": {
     "type": null,
     "name": "Testaĉambro Nulo",
-    "north": null,
-    "east": "tst_1",
-    "south": null,
-    "west": null,
+    "ways": {
+      "north": null,
+      "east": "tst_1",
+      "south": null,
+      "west": null
+    },
     "items": {}
   },
   "tst_1": {
     "type": null,
     "name": "Testaĉambro Unu",
-    "north": null,
-    "east": null,
-    "south": null,
-    "west": "tst_0",
+    "ways": {"north": null, "east": null, "south": null, "west": "tst_0"},
     "items": ["scr_0"]
   }
 }
