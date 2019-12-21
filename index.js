@@ -8,7 +8,7 @@ const readline = require('readline').createInterface({
 const playerInfo = {
   name: null,
   currentRoom: 'tst_0',
-  inventary: {},
+  inventary: ['scr_0'],
 };
 
 // This Object have all the available items
@@ -75,7 +75,7 @@ function where() {
   console.log(name + ' estas en la ĉambro ' + room.name);
 }
 
-//this function moves the player in the given direction
+// This function moves the player in the given direction
 function move() {
   readline.question('kiu direkto vi volas prenu? ', input => {
     const direction = availableDirections[input];
@@ -90,6 +90,7 @@ function move() {
   });
 }
 
+// This function shows all the objects present in the room
 function lookAround() {
   const room = roomsList[playerInfo.currentRoom];
   if (room.items.length > 0) {
@@ -100,6 +101,11 @@ function lookAround() {
     console.log('Estas neniuj eroj en tiu ĉambro!');
   }
   main();
+}
+
+// This function shows all the objects present in the player's inventary
+function inventary() {
+  const inventary = playerInfo.inventary;
 }
 
 function endGame() {
