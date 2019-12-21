@@ -7,6 +7,7 @@ const readline = require('readline').createInterface({
 const playerInfo = {
   name: null,
   currentRoom: 'tst_0',
+  inventary: {},
 };
 
 // This Object have all the available rooms
@@ -27,7 +28,17 @@ const roomsList = {
     east: null,
     south: null,
     west: 'tst_0',
-    items: {},
+    items: ['scr_0'],
+  },
+};
+
+// This Object have all the available items
+const itemsList = {
+  scr_0: {
+    name: 'Pergamino',
+    use: () => {
+      console.log('Bonvena aventuristo');
+    },
   },
 };
 
@@ -35,6 +46,7 @@ const availableCommands = {
   helpi: help,
   movigxi: move,
   eliri: endGame,
+  cxirkauxrigardu: lookAround,
 };
 
 function main() {
@@ -86,6 +98,18 @@ function move() {
     }
     main();
   });
+}
+
+function lookAround() {
+  const room = roomsList[playerInfo.currentRoom];
+  if (room.items.length > 0) {
+    for (const item of room.items) {
+      console.log('Estas ' + itemsList[item].name + ' en tiu ĉambro!');
+    }
+  } else {
+    console.log('Estas neniuj eroj en tiu ĉambro!');
+  }
+  main();
 }
 
 function endGame() {
