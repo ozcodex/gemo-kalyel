@@ -37,6 +37,13 @@ const availableCommands = {
   eliri: endGame,
 };
 
+const availableDirections = {
+  nordo: 'north',
+  oriento: 'east',
+  sudo: 'south',
+  okcidento: 'west',
+};
+
 function main() {
   readline.question('kion vi volas fari? ', command => {
     const action = availableCommands[command];
@@ -75,10 +82,11 @@ function where() {
 
 //this function moves the player in the given direction
 function move() {
-  readline.question('kiu direkto vi volas prenu? ', direction => {
+  readline.question('kiu direkto vi volas prenu? ', input => {
+    const direction = availableDirections[input];
     //TODO: validate input
     const room = roomsList[playerInfo.currentRoom];
-    if (room[direction]) {
+    if (direction && room[direction]) {
       playerInfo.currentRoom = room[direction];
       where();
     } else {
