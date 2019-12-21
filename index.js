@@ -1,4 +1,4 @@
-const roomsList = require('./map.json')
+const roomsList = require('./map.json');
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -8,7 +8,7 @@ const readline = require('readline').createInterface({
 const playerInfo = {
   name: null,
   currentRoom: 'tst_0',
-  inventary: ['scr_0'],
+  inventory: ['scr_0'],
 };
 
 // This Object have all the available items
@@ -26,6 +26,7 @@ const availableCommands = {
   movigxi: move,
   eliri: endGame,
   cxirkauxrigardu: lookAround,
+  inventaro: inventory,
 };
 
 const availableDirections = {
@@ -103,9 +104,17 @@ function lookAround() {
   main();
 }
 
-// This function shows all the objects present in the player's inventary
-function inventary() {
-  const inventary = playerInfo.inventary;
+// This function shows all the objects present in the player's inventory
+function inventory() {
+  const inventory = playerInfo.inventory;
+  if (inventory.length > 0) {
+    for (const item of inventory) {
+      console.log('Vi havas ' + itemsList[item].name + ' en via inventaro.');
+    }
+  } else {
+    console.log('Vi ne havas artikolojn en via inventaro');
+  }
+  main();
 }
 
 function endGame() {
