@@ -1,19 +1,25 @@
 {
   "tst_0": {
-    "type": null,
+    "type": "ĉambro",
     "name": "Testaĉambro Nulo",
     "ways": {
       "north": null,
       "east": "tst_1",
-      "south": null,
+      "south": "psg_0",
       "west": null
     },
-    "items": {}
+    "items": []
   },
   "tst_1": {
-    "type": null,
+    "type": "ĉambro",
     "name": "Testaĉambro Unu",
     "ways": {"north": null, "east": null, "south": null, "west": "tst_0"},
     "items": ["scr_0"]
+  },
+  "psg_0":{
+  "type":"pasejo",
+  "name": "Mallarĝa pasejo",
+  "ways":{"north": "tst_0", "east": null, "south": null, "west": null},
+  "items": []
   }
 }
