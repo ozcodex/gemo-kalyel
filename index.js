@@ -1,14 +1,15 @@
 const readline = require('readline').createInterface({
   input: process.stdin,
-  output: process.stdout
-})
+  output: process.stdout,
+});
 
 const playerInfo = {
-  name : ""
-}
+  name: '',
+  currentRoom: 'tst_0',
+};
 
-readline.question('Kiu estas vi? ', (name) => {
-  console.log('Saluton ' + name + '!')
-  playerInfo.name = name
-  readline.close()
-})
+readline.question('Kiu estas vi? ', name => {
+  console.log('Saluton ' + name + '!');
+  playerInfo.name = name;
+  readline.close();
+});
