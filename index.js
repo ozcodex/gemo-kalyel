@@ -11,13 +11,22 @@ const playerInfo = {
 
 // This Object have all the available rooms
 const roomsList = {
-  tst_0: {
+  'tst_0': {
     type: null,
     name: 'Testaĉambro Nulo',
     north: null,
-    east: null,
+    east: 'tst_1',
     south: null,
     west: null,
+    items: {},
+  },
+  'tst_1': {
+    type: null,
+    name: 'Testaĉambro Unu',
+    north: null,
+    east: null,
+    south: null,
+    west: 'tst_0',
     items: {},
   },
 };
