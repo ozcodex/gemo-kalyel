@@ -36,3 +36,14 @@ function where() {
   const room = roomsList[playerInfo.currentRoom];
   console.log(name + ' estas en la ĉambro ' + room.name);
 }
+
+//this function moves the player in the given direction
+function move(direction){
+  //TODO: validate input
+  const room = roomsList[playerInfo.currentRoom];
+  if (!room[direction]){
+    console.log("Ne estas vojo en tio direkto")
+    return
+  }
+  playerInfo.currentRoom = room[direction];
+}
