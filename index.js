@@ -1,3 +1,4 @@
+const roomsList = require('./map.json')
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -8,28 +9,6 @@ const playerInfo = {
   name: null,
   currentRoom: 'tst_0',
   inventary: {},
-};
-
-// This Object have all the available rooms
-const roomsList = {
-  tst_0: {
-    type: null,
-    name: 'Testaĉambro Nulo',
-    north: null,
-    east: 'tst_1',
-    south: null,
-    west: null,
-    items: {},
-  },
-  tst_1: {
-    type: null,
-    name: 'Testaĉambro Unu',
-    north: null,
-    east: null,
-    south: null,
-    west: 'tst_0',
-    items: ['scr_0'],
-  },
 };
 
 // This Object have all the available items
@@ -72,6 +51,10 @@ function main() {
 function help() {
   console.log('Disponeblaj komandoj:');
   for (const command in availableCommands) {
+    console.log(' - ' + command);
+  }
+  console.log('Disponeblaj direktoj:');
+  for (const command in availableDirections) {
     console.log(' - ' + command);
   }
   main();
