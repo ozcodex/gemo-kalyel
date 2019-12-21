@@ -93,6 +93,12 @@ function move() {
 // This function shows all the objects present in the room
 function lookAround() {
   const room = roomsList[playerInfo.currentRoom];
+  // Give a description about the available paths
+  for (const direction in room.ways){
+    if (room.ways[direction])
+      console.log("There are a way in " + direction + " direction" )
+  }
+  // Give a description about the items on the room
   if (room.items.length > 0) {
     for (const item of room.items) {
       console.log('Estas ' + itemsList[item].name + ' en tiu ĉambro!');
