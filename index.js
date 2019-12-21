@@ -84,7 +84,6 @@ function where() {
 function move() {
   readline.question('kiu direkto vi volas prenu? ', input => {
     const direction = availableDirections[input];
-    //TODO: validate input
     const room = roomsList[playerInfo.currentRoom];
     if (direction && room[direction]) {
       playerInfo.currentRoom = room[direction];
