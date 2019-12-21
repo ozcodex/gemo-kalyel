@@ -8,6 +8,18 @@ const playerInfo = {
   currentRoom: 'tst_0',
 };
 
+const roomsList = {
+  tst_0: {
+    type: '',
+    id: '',
+    north: '',
+    east: '',
+    south: '',
+    west: '',
+    items: {},
+  },
+}
+
 readline.question('Kiu estas vi? ', name => {
   console.log('Saluton ' + name + '!');
   playerInfo.name = name;
@@ -18,3 +30,5 @@ readline.question('Kiu estas vi? ', name => {
 function where(){
   console.log(playerInfo.name + " estas en la ĉambro " + playerInfo.currentRoom)
 }
+
+;
