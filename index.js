@@ -11,7 +11,7 @@ const playerInfo = {
 
 // This Object have all the available rooms
 const roomsList = {
-  'tst_0': {
+  tst_0: {
     type: null,
     name: 'Testaĉambro Nulo',
     north: null,
@@ -20,7 +20,7 @@ const roomsList = {
     west: null,
     items: {},
   },
-  'tst_1': {
+  tst_1: {
     type: null,
     name: 'Testaĉambro Unu',
     north: null,
@@ -31,12 +31,39 @@ const roomsList = {
   },
 };
 
+const availableCommands = {
+  helpi: help,
+  movigxi: move,
+  eliri: endGame,
+};
+
+function main() {
+  readline.question('kion vi volas fari? ', command => {
+    const action = availableCommands[command];
+    if (action) {
+      action();
+    } else {
+      console.log(playerInfo.name + ' ne komprenas!');
+      main();
+    }
+  });
+}
+
+// This function shows the available commands
+function help() {
+  console.log('Disponeblaj komandoj:');
+  for (const command in availableCommands) {
+    console.log(' - ' + command);
+  }
+  main();
+}
+
 // Entry Point, where everything starts
 readline.question('Kiu estas vi? ', name => {
   console.log('Saluton ' + name + '!');
   playerInfo.name = name;
   where();
-  readline.close();
+  main();
 });
 
 // This function prints the current position of player
@@ -47,12 +74,21 @@ function where() {
 }
 
 //this function moves the player in the given direction
-function move(direction){
-  //TODO: validate input
-  const room = roomsList[playerInfo.currentRoom];
-  if (!room[direction]){
-    console.log("Ne estas vojo en tio direkto")
-    return
-  }
-  playerInfo.currentRoom = room[direction];
+function move() {
+  readline.question('kiu direkto vi volas prenu? ', direction => {
+    //TODO: validate input
+    const room = roomsList[playerInfo.currentRoom];
+    if (room[direction]) {
+      playerInfo.currentRoom = room[direction];
+      where();
+    } else {
+      console.log('Ne estas vojo en tio direkto!');
+    }
+    main();
+  });
+}
+
+function endGame() {
+  console.log('Adiaŭ!');
+  readline.close();
 }
