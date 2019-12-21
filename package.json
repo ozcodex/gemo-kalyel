@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ozcodex/gemo-kalyel/issues"
   },
-  "homepage": "https://github.com/ozcodex/gemo-kalyel#readme"
+  "homepage": "https://github.com/ozcodex/gemo-kalyel#readme",
+  "dependencies": {
+    "readline": "^1.3.0"
+  }
 }
