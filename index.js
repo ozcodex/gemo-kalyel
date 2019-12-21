@@ -117,6 +117,12 @@ function inventory() {
   main();
 }
 
+// This function takes all items in the room and appends to player's inventory
+function takeAllItems() {
+  const room = roomList[playerInfo.currentRoom];
+  
+}
+
 function endGame() {
   console.log('Adiaŭ!');
   readline.close();
