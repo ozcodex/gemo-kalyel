@@ -1,0 +1,19 @@
+{
+  "name": "gemo-kalyel",
+  "version": "1.0.0",
+  "description": "malgranda teksta aventuro",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozcodex/gemo-kalyel.git"
+  },
+  "author": "ozcodex",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ozcodex/gemo-kalyel/issues"
+  },
+  "homepage": "https://github.com/ozcodex/gemo-kalyel#readme"
+}
