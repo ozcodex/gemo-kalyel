@@ -1,0 +1,104 @@
+{
+  "default": "cav_0",
+  "rooms": {
+    "cav_0": {
+      "type": "ĉambro",
+      "name": "Malhela Kaverno",
+      "ways": {
+        "north": null,
+        "east": "cav_1",
+        "south": "psg_0",
+        "west": null
+      },
+      "items": []
+    },
+    "cav_1": {
+      "type": "ĉambro",
+      "name": "Malhela Kaverno",
+      "ways": {
+        "north": null,
+        "east": null,
+        "south": "cav_2",
+        "west": "cav_0"
+      },
+      "items": []
+    },
+    "psg_0": {
+      "type": "pasejo",
+      "name": "Larĝa pasejo",
+      "ways": {
+        "north": "cav_0",
+        "east": null,
+        "south": "cav_3",
+        "west": null
+      },
+      "items": []
+    },
+    "cav_2": {
+      "type": "ĉambro",
+      "name": "Malgranda Kaverno",
+      "ways": {
+        "north": "cav_1",
+        "east": null,
+        "south": "psg_1",
+        "west": null
+      },
+      "items": []
+    },
+    "psg_1": {
+      "type": "pasejo",
+      "name": "Mallarĝa pasejo",
+      "ways": {
+        "north": "cav_2",
+        "east": null,
+        "south": null,
+        "west": "cav_3"
+      },
+      "items": []
+    },
+    "cav_3": {
+      "type": "ĉambro",
+      "name": "Granda Kaverno",
+      "ways": {
+        "north": "psg_0",
+        "east": "psg_1",
+        "south": "cav_4",
+        "west": null
+      },
+      "items": []
+    },
+    "cav_4": {
+      "type": "ĉambro",
+      "name": "Seninteresa Kaverno",
+      "ways": {
+        "north": "cav_3",
+        "east": null,
+        "south": null,
+        "west": "cav_5"
+      },
+      "items": []
+    },
+    "cav_5": {
+      "type": "ĉambro",
+      "name": "Malgranda Kaverno",
+      "ways": {
+        "north": "psg_2",
+        "east": "cav_4",
+        "south": null,
+        "west": null
+      },
+      "items": []
+    },
+    "psg_2": {
+      "type": "pasejo",
+      "name": "Glita Deklivo",
+      "ways": {
+        "north": "cav_0",
+        "east": null,
+        "south": "cav_5",
+        "west": null
+      },
+      "items": []
+    }
+  }
+}

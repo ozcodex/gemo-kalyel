@@ -1,4 +1,3 @@
-const map = require('./map.json');
 const words = require('./words.json');
 const port = require('./server.json').port;
 const io = require('socket.io-client');
@@ -6,15 +5,15 @@ const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+var map = require('./map.json');
 
 var connected = false;
 var socket;
-var players = {}
 
 // This Object carries the Player Info
-const playerInfo = {
+var playerInfo = {
   name: null,
-  currentRoom: 'tst_0',
+  currentRoom: map.default,
   inventory: ['scr_0'],
 };
 
@@ -88,11 +87,14 @@ function connect() {
       socket = io('http://' + ip + ':' + port);
       socket.on('connect', () => {
         connected = true;
-        players[socket.id] = playerInfo;
-        socket.emit('playerInfo', playerInfo);
+        socket.emit('initialPlayerInfo', playerInfo);
       });
-      socket.on('update', data => {
-        console.log('servilo diras: ', data);
+      //change the user info according to server's map
+      socket.on('updatePlayerInfo', data => {
+        playerInfo = data;
+      });
+      socket.on('updateMap', data => {
+        map = data;
       });
     }
     main();
@@ -133,6 +135,7 @@ function move() {
 
 // This function shows all the objects present in the room
 function lookAround() {
+  where();
   const room = map.rooms[playerInfo.currentRoom];
   // Give a description about the available paths
   for (const direction in room.ways) {
@@ -179,7 +182,7 @@ function takeAllItems() {
 }
 
 function endGame() {
-  if(connected) socket.disconnect();
+  if (connected) socket.disconnect();
   console.log('Adiaŭ!');
   readline.close();
 }
