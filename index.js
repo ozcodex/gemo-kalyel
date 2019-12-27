@@ -202,12 +202,14 @@ function takeAllItems() {
   if (room.items.length > 0) {
     for (const item of room.items) {
       playerInfo.inventory.push(item);
-      console.log(playerInfo.inventory);
-      console.log(room.items);
+      // console.log(playerInfo.inventory);
+      // console.log(room.items);
+      console.log('Vi kaptas la ' + itemsList[item].name + 'n.');
     }
-    map.rooms[playerInfo.currentRoom].length = 0;
-    console.log(room.items);
+    map.rooms[playerInfo.currentRoom] = [];
+    // console.log(map.rooms[playerInfo.currentRoom]);
   }
+  main();
 }
 
 function endGame() {
