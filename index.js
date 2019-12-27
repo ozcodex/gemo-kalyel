@@ -1,4 +1,4 @@
-const roomsList = require('./map.json');
+const map = require('./map.json');
 const words = require('./words.json');
 const port = require('./server.json').port;
 const io = require('socket.io-client');
@@ -112,7 +112,7 @@ readline.question('Kiu estas vi? ', name => {
 // This function prints the current position of player
 function where() {
   const name = playerInfo.name;
-  const room = roomsList[playerInfo.currentRoom];
+  const room = map.rooms[playerInfo.currentRoom];
   console.log(name + ' estas en la ' + room.type + ' ' + room.name);
 }
 
@@ -120,7 +120,7 @@ function where() {
 function move() {
   readline.question('kiu direkto vi volas prenu? ', input => {
     const direction = availableDirections[input];
-    const room = roomsList[playerInfo.currentRoom];
+    const room = map.rooms[playerInfo.currentRoom];
     if (direction && room.ways[direction]) {
       playerInfo.currentRoom = room.ways[direction];
       where();
@@ -133,14 +133,14 @@ function move() {
 
 // This function shows all the objects present in the room
 function lookAround() {
-  const room = roomsList[playerInfo.currentRoom];
+  const room = map.rooms[playerInfo.currentRoom];
   // Give a description about the available paths
   for (const direction in room.ways) {
     let target = room.ways[direction];
     if (target)
       console.log(
         'Estas ' +
-          roomsList[target].type +
+          map.rooms[target].type +
           ' en ' +
           words[direction] +
           ' direckto',
@@ -172,7 +172,7 @@ function inventory() {
 
 // This function takes all items in the room and appends to player's inventory
 function takeAllItems() {
-  const room = roomsList[playerInfo.currentRoom];
+  const room = map.rooms[playerInfo.currentRoom];
   console.log(playerInfo.inventory);
   console.log(room.items);
   //playerInfo.inventory.concat(room.items);
