@@ -118,7 +118,7 @@ function where() {
 }
 
 function net_where() {
-  socket.emit('where', (room) => {
+  socket.emit('where', room => {
     console.log(
       playerInfo.name + ' estas en la ' + room.type + ' ' + room.name,
     );
@@ -202,12 +202,9 @@ function takeAllItems() {
   if (room.items.length > 0) {
     for (const item of room.items) {
       playerInfo.inventory.push(item);
-      // console.log(playerInfo.inventory);
-      // console.log(room.items);
       console.log('Vi kaptas la ' + itemsList[item].name + 'n.');
     }
     map.rooms[playerInfo.currentRoom] = [];
-    // console.log(map.rooms[playerInfo.currentRoom]);
   }
   main();
 }
