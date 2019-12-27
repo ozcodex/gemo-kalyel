@@ -1,9 +1,15 @@
-const roomsList = require('./map.json')
-const words = require('./words.json')
+const roomsList = require('./map.json');
+const words = require('./words.json');
+const port = require('./server.json').port;
+const io = require('socket.io-client');
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+
+var connected = false;
+var socket;
+var players = {}
 
 // This Object carries the Player Info
 const playerInfo = {
@@ -27,6 +33,7 @@ const availableCommands = {
   movigxi: move,
   eliri: endGame,
   cxirkauxrigardu: lookAround,
+  konekti: connect,
 };
 
 const availableDirections = {
@@ -35,18 +42,6 @@ const availableDirections = {
   sudo: 'south',
   okcidento: 'west',
 };
-
-function main() {
-  readline.question('kion vi volas fari? ', command => {
-    const action = availableCommands[command];
-    if (action) {
-      action();
-    } else {
-      console.log(playerInfo.name + ' ne komprenas!');
-      main();
-    }
-  });
-}
 
 // This function shows the available commands
 function help() {
@@ -61,6 +56,50 @@ function help() {
   main();
 }
 
+// Main function, understood the commands
+function main() {
+  readline.question('kion vi volas fari? ', command => {
+    const action = availableCommands[command];
+    if (action) {
+      action();
+    } else {
+      console.log(playerInfo.name + ' ne komprenas!');
+      main();
+    }
+  });
+}
+
+// ------------------------------------------- //
+//                                             //
+//                NETWORK PLAY                 //
+//                                             //
+// ------------------------------------------- //
+
+function connect() {
+  //regular expression to validate ip
+  var rx = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+  readline.question('kiu estas la IP de la servilo? ', ip => {
+    //TODO: check if the port is reachable
+    if (!rx.test(ip)) {
+      console.log('malvalida IP-adreso');
+    } else {
+      socket = io('http://' + ip + ':' + port);
+      socket.on('connect', () => {
+        connected = true;
+        console.log(socket.id);
+        socket.emit('msg', 'Saluton Mondon');
+        socket.send('hello', console.log);
+      });
+      socket.on('message', data => {
+        console.log('servilo diras: ', data);
+      });
+    }
+    main();
+  });
+}
+
+// ----------- END NETWORK PLAY --------------- //
+
 // Entry Point, where everything starts
 readline.question('Kiu estas vi? ', name => {
   console.log('Saluton ' + name + '!');
@@ -73,7 +112,7 @@ readline.question('Kiu estas vi? ', name => {
 function where() {
   const name = playerInfo.name;
   const room = roomsList[playerInfo.currentRoom];
-  console.log(name + ' estas en la ' + room.type + " " + room.name);
+  console.log(name + ' estas en la ' + room.type + ' ' + room.name);
 }
 
 // This function moves the player in the given direction
@@ -95,10 +134,16 @@ function move() {
 function lookAround() {
   const room = roomsList[playerInfo.currentRoom];
   // Give a description about the available paths
-  for (const direction in room.ways){
-    let target = room.ways[direction]
+  for (const direction in room.ways) {
+    let target = room.ways[direction];
     if (target)
-      console.log("Estas "+ roomsList[target].type + " en " + words[direction] + " direckto" )
+      console.log(
+        'Estas ' +
+          roomsList[target].type +
+          ' en ' +
+          words[direction] +
+          ' direckto',
+      );
   }
   // Give a description about the items on the room
   if (room.items.length > 0) {
@@ -117,6 +162,7 @@ function inventary() {
 }
 
 function endGame() {
+  if(connected) socket.disconnect();
   console.log('Adiaŭ!');
   readline.close();
 }
