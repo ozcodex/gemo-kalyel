@@ -19,10 +19,28 @@ socket.on('connection', skt => {
     console.log(`received ${playerInfo.name}'s playerInfo`);
   });
 
+  skt.on('where', cb => {
+    let playerInfo = players[skt.id];
+    let currentRoom = playerInfo.currentRoom;
+    let room = map.rooms[currentRoom];
+    cb(room);
+  });
+
+  skt.on('move', (direction, cb) => {
+    let room = map.rooms[players[skt.id].currentRoom];
+    if (direction && room.ways[direction]) {
+      players[skt.id].currentRoom = room.ways[direction];
+      cb();
+    } else {
+      cb('Ne estas vojo en tio direkto!');
+    }
+  });
+
   skt.on('msg', msg => {
     console.log('incoming msg:', msg);
   });
   skt.on('disconnect', evt => {
+    players[skt.id] = undefined;
     console.log('disconnected', skt.id);
   });
 });

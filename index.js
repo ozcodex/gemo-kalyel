@@ -35,6 +35,7 @@ const availableCommands = {
   inventaro: inventory,
   kaptuErojn: takeAllItems,
   konekti: connect,
+  kie: where,
 };
 
 const availableDirections = {
@@ -93,9 +94,6 @@ function connect() {
       socket.on('updatePlayerInfo', data => {
         playerInfo = data;
       });
-      socket.on('updateMap', data => {
-        map = data;
-      });
     }
     main();
   });
@@ -107,19 +105,30 @@ function connect() {
 readline.question('Kiu estas vi? ', name => {
   console.log('Saluton ' + name + '!');
   playerInfo.name = name;
-  where();
   main();
 });
 
 // This function prints the current position of player
 function where() {
+  if (connected) return net_where();
   const name = playerInfo.name;
   const room = map.rooms[playerInfo.currentRoom];
   console.log(name + ' estas en la ' + room.type + ' ' + room.name);
+  main();
+}
+
+function net_where() {
+  socket.emit('where', (room) => {
+    console.log(
+      playerInfo.name + ' estas en la ' + room.type + ' ' + room.name,
+    );
+    main();
+  });
 }
 
 // This function moves the player in the given direction
 function move() {
+  if (connected) return net_move();
   readline.question('kiu direkto vi volas prenu? ', input => {
     const direction = availableDirections[input];
     const room = map.rooms[playerInfo.currentRoom];
@@ -128,14 +137,28 @@ function move() {
       where();
     } else {
       console.log('Ne estas vojo en tio direkto!');
+      main();
     }
-    main();
+  });
+}
+
+function net_move() {
+  readline.question('kiu direkto vi volas prenu? ', input => {
+    const direction = availableDirections[input];
+    //get rooms
+    socket.emit('move', direction, err => {
+      if (err) {
+        console.log(err);
+        main();
+      } else {
+        net_where();
+      }
+    });
   });
 }
 
 // This function shows all the objects present in the room
 function lookAround() {
-  where();
   const room = map.rooms[playerInfo.currentRoom];
   // Give a description about the available paths
   for (const direction in room.ways) {
