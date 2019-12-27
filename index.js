@@ -176,9 +176,15 @@ function inventory() {
 // This function takes all items in the room and appends to player's inventory
 function takeAllItems() {
   const room = map.rooms[playerInfo.currentRoom];
-  console.log(playerInfo.inventory);
-  console.log(room.items);
-  //playerInfo.inventory.concat(room.items);
+  if (room.items.length > 0) {
+    for (const item of room.items) {
+      playerInfo.inventory.push(item);
+      console.log(playerInfo.inventory);
+      console.log(room.items);
+    }
+    map.rooms[playerInfo.currentRoom].length = 0;
+    console.log(room.items);
+  }
 }
 
 function endGame() {
