@@ -86,11 +86,10 @@ function connect() {
       socket = io('http://' + ip + ':' + port);
       socket.on('connect', () => {
         connected = true;
-        console.log(socket.id);
-        socket.emit('msg', 'Saluton Mondon');
-        socket.send('hello', console.log);
+        players[socket.id] = playerInfo;
+        socket.emit('playerInfo', playerInfo);
       });
-      socket.on('message', data => {
+      socket.on('update', data => {
         console.log('servilo diras: ', data);
       });
     }
