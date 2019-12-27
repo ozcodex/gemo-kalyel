@@ -28,6 +28,7 @@ const availableCommands = {
   eliri: endGame,
   cxirkauxrigardu: lookAround,
   inventaro: inventory,
+  kaptuErojn: takeAllItems,
 };
 
 const availableDirections = {
@@ -127,7 +128,7 @@ function inventory() {
 
 // This function takes all items in the room and appends to player's inventory
 function takeAllItems() {
-  const room = roomList[playerInfo.currentRoom];
+  const room = roomsList[playerInfo.currentRoom];
   console.log(playerInfo.inventory);
   console.log(room.items);
   //playerInfo.inventory.concat(room.items);
