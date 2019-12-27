@@ -15,7 +15,7 @@ var players = {}
 const playerInfo = {
   name: null,
   currentRoom: 'tst_0',
-  inventary: ['scr_0'],
+  inventory: ['scr_0'],
 };
 
 // This Object have all the available items
@@ -33,6 +33,8 @@ const availableCommands = {
   movigxi: move,
   eliri: endGame,
   cxirkauxrigardu: lookAround,
+  inventaro: inventory,
+  kaptuErojn: takeAllItems,
   konekti: connect,
 };
 
@@ -155,9 +157,25 @@ function lookAround() {
   main();
 }
 
-// This function shows all the objects present in the player's inventary
-function inventary() {
-  const inventary = playerInfo.inventary;
+// This function shows all the objects present in the player's inventory
+function inventory() {
+  const inventory = playerInfo.inventory;
+  if (inventory.length > 0) {
+    for (const item of inventory) {
+      console.log('Vi havas ' + itemsList[item].name + ' en via inventaro.');
+    }
+  } else {
+    console.log('Vi ne havas artikolojn en via inventaro');
+  }
+  main();
+}
+
+// This function takes all items in the room and appends to player's inventory
+function takeAllItems() {
+  const room = roomsList[playerInfo.currentRoom];
+  console.log(playerInfo.inventory);
+  console.log(room.items);
+  //playerInfo.inventory.concat(room.items);
 }
 
 function endGame() {
