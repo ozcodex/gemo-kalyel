@@ -99,7 +99,11 @@ function connect() {
   });
 }
 
-// ----------- END NETWORK PLAY --------------- //
+// ------------------------------------------- //
+//                                             //
+//              ACTION FUNCTIONS               //
+//                                             //
+// ------------------------------------------- //
 
 // Entry Point, where everything starts
 readline.question('Kiu estas vi? ', name => {
@@ -118,7 +122,7 @@ function where() {
 }
 
 function net_where() {
-  socket.emit('where', room => {
+  socket.emit('get_room', room => {
     console.log(
       playerInfo.name + ' estas en la ' + room.type + ' ' + room.name,
     );
@@ -159,17 +163,28 @@ function net_move() {
 
 // This function shows all the objects present in the room
 function lookAround() {
+  if (connected) return net_lookArround();
   const room = map.rooms[playerInfo.currentRoom];
+  _describeRoom(room, map.rooms);
+  main();
+}
+
+function net_lookArround() {
+  socket.emit('get_room', room => {
+    socket.emit('get_adjacent_rooms', rooms => {
+      _describeRoom(room,rooms);
+      main();
+    });
+  });
+}
+
+function _describeRoom(room, rooms) {
   // Give a description about the available paths
   for (const direction in room.ways) {
     let target = room.ways[direction];
     if (target)
       console.log(
-        'Estas ' +
-          map.rooms[target].type +
-          ' en ' +
-          words[direction] +
-          ' direckto',
+        'Estas ' + rooms[target].type + ' en ' + words[direction] + ' direckto',
       );
   }
   // Give a description about the items on the room
@@ -180,7 +195,6 @@ function lookAround() {
   } else {
     console.log('Estas neniuj eroj en tiu ĉambro!');
   }
-  main();
 }
 
 // This function shows all the objects present in the player's inventory

@@ -9,7 +9,6 @@ const players = {};
 //TODO add checksums
 socket.on('connection', skt => {
   console.log('connected', skt.id);
-  skt.emit('updateMap', map);
 
   skt.on('initialPlayerInfo', playerInfo => {
     playerInfo.currentRoom = map.default;
@@ -19,11 +18,25 @@ socket.on('connection', skt => {
     console.log(`received ${playerInfo.name}'s playerInfo`);
   });
 
-  skt.on('where', cb => {
+  skt.on('get_room', cb => {
     let playerInfo = players[skt.id];
     let currentRoom = playerInfo.currentRoom;
     let room = map.rooms[currentRoom];
     cb(room);
+  });
+
+  skt.on('get_adjacent_rooms', cb => {
+    let playerInfo = players[skt.id];
+    let currentRoom = playerInfo.currentRoom;
+    const room = map.rooms[currentRoom];
+    let rooms = {};
+    for (const direction in room.ways) {
+      let target = room.ways[direction];
+      if (target) {
+        rooms[target] = map.rooms[target];
+      }
+    }
+    cb(rooms);
   });
 
   skt.on('move', (direction, cb) => {
