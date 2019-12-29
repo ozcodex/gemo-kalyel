@@ -1,7 +1,7 @@
 const http = require('http').createServer();
 const socket = require('socket.io')(http);
 const serverInfo = require('./server.json');
-const port = process.env.PORT || serverInfo.port;
+const port = serverInfo.port;
 const map = require(serverInfo.map);
 
 const players = {};
