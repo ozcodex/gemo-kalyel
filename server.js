@@ -66,7 +66,8 @@ socket.on('connection', skt => {
   });
 
   skt.on('shout', msg => {
-    skt.broadcast.emit('shout');
+    let room = players[skt.id].currentRoom
+    skt.broadcast.emit('shout',room);
   });
 
   skt.on('say', msg => {

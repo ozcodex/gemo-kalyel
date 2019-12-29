@@ -82,7 +82,7 @@ function main() {
 
 function connect() {
   //regular expression to validate ip
-  var ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}:[0-9]{2,5}$/;
+  var ipRegex = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]{2,5}$/;
   var urlRegex = /^(([A-z0-9]+)[.-]?)+\.[A-z]{2,5}:[0-9]{2,5}$/;
   readline.question(
     chalk.cyan.italic('kiu estas la adreso kaj haveno de la servilo? '),
@@ -97,12 +97,14 @@ function connect() {
           console.log('Sukcese konektita al servilo');
           main();
         });
-        socket.on('shout', () => {
-          console.log('iu krias en la malproksimo\n');
+        socket.on('shout', senderRoom => {
+          let distance =
+            (senderRoom === playerInfo.currentRoom ? '' : 'mal') + 'proksime';
+          console.log(`iu krias ${distance}\n`);
           main();
         });
-        socket.on('msg', (sender,msg) => {
-          console.log(chalk.yellow(sender+": ")+msg+'\n');
+        socket.on('msg', (sender, msg) => {
+          console.log(chalk.yellow(sender + ': ') + msg + '\n');
           main();
         });
         //change the user info according to server's map
@@ -275,17 +277,16 @@ function net_shout() {
 //this makes the character to talk
 function say() {
   readline.question(chalk.cyan.italic('kion vi volas diri? '), input => {
-    console.log(chalk.yellow(playerInfo.name+": ") + input)
+    console.log(chalk.yellow(playerInfo.name + ': ') + input);
     if (connected) return net_say(input);
     main();
   });
 }
 
-function net_say(msg){
+function net_say(msg) {
   socket.emit('say', msg);
   main();
 }
-
 
 // This function shows all the objects present in the player's inventory
 function inventory() {
