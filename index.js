@@ -35,6 +35,7 @@ const availableCommands = {
   kaptuErojn: takeAllItems,
   konekti: connect,
   kie: where,
+  krii: shout,
 };
 
 const availableDirections = {
@@ -80,30 +81,37 @@ function connect() {
   //regular expression to validate ip
   var ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}:[0-9]{2,5}$/;
   var urlRegex = /^(([A-z0-9]+)[.-]?)+\.[A-z]{2,5}:[0-9]{2,5}$/;
-  readline.question('kiu estas la adreso kaj haveno de la servilo? ', address => {
-    //TODO: check if the port is reachable
-    //TODO: accept different formats
-    if (ipRegex.test(address) || urlRegex.test(address)) {
-      socket = io("http://" + address );
-      socket.on('connect', () => {
-        connected = true;
-        socket.emit('initialPlayerInfo', playerInfo);
-        console.log('Sukcese konektita al servilo');
+  readline.question(
+    'kiu estas la adreso kaj haveno de la servilo? ',
+    address => {
+      //TODO: check if the port is reachable
+      //TODO: accept different formats
+      if (ipRegex.test(address) || urlRegex.test(address)) {
+        socket = io('http://' + address);
+        socket.on('connect', () => {
+          connected = true;
+          socket.emit('initialPlayerInfo', playerInfo);
+          console.log('Sukcese konektita al servilo');
+          main();
+        });
+        socket.on('shout', () => {
+          console.log('iu krias en la malproksimo\n');
+          main();
+        });
+        //change the user info according to server's map
+        socket.on('updatePlayerInfo', data => {
+          playerInfo = data;
+        });
+        socket.on('disconnect', () => {
+          console.log('la servilo estis malkonektita');
+          endGame();
+        });
+      } else {
+        console.log('malvalida adreso');
         main();
-      });
-      //change the user info according to server's map
-      socket.on('updatePlayerInfo', data => {
-        playerInfo = data;
-      });
-      socket.on('disconnect',()=>{
-        console.log('la servilo estis malkonektita')
-        endGame()
-      })
-    } else {
-      console.log('malvalida adreso');
-      main();
-    }
-  });
+      }
+    },
+  );
 }
 
 // ------------------------------------------- //
@@ -203,11 +211,23 @@ function _describeRoom(room, rooms) {
     console.log('Estas neniuj eroj en tiu ĉambro!');
   }
   // if there are players, give a description of the players
-  if (room.players && room.players.length > 0){
-    for (const name of room.players){
-      console.log(name + " estas en ĉi tiu " + room.type);
+  if (room.players && room.players.length > 0) {
+    for (const name of room.players) {
+      console.log(name + ' estas en ĉi tiu ' + room.type);
     }
   }
+}
+
+// This Makes the player shout loudly
+function shout() {
+  console.log(playerInfo.name + ' kriis laŭte');
+  if (connected) return net_shout();
+  main();
+}
+
+function net_shout(){
+  socket.emit('shout');
+  main();
 }
 
 // This function shows all the objects present in the player's inventory
@@ -240,5 +260,5 @@ function endGame() {
   if (connected) socket.disconnect();
   console.log('Adiaŭ!');
   readline.close();
-  process.exit()
+  process.exit();
 }

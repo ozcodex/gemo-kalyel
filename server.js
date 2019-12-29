@@ -65,6 +65,10 @@ socket.on('connection', skt => {
     }
   });
 
+ skt.on('shout', msg => {
+    skt.broadcast.emit('shout');
+  });
+
   skt.on('msg', msg => {
     log('incoming msg:', msg);
   });
