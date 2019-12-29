@@ -48,11 +48,11 @@ const availableDirections = {
 
 // This function shows the available commands
 function help() {
-  console.log('Disponeblaj komandoj:');
+  console.log(chalk.bold('Disponeblaj komandoj:'));
   for (const command in availableCommands) {
     console.log(' - ' + command);
   }
-  console.log('Disponeblaj direktoj:');
+  console.log(chalk.bold('Disponeblaj direktoj:'));
   for (const command in availableDirections) {
     console.log(' - ' + command);
   }
