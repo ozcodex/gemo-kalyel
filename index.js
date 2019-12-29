@@ -79,13 +79,12 @@ function main() {
 
 function connect() {
   //regular expression to validate ip
-  var rx = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
-  readline.question('kiu estas la IP de la servilo? ', ip => {
+  var ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+  var urlRegex = /^^(([A-z]+)[.-]+)+[A-z]{2,5}$/;
+  readline.question('kiu estas la adreso de la servilo? ', address => {
     //TODO: check if the port is reachable
-    if (!rx.test(ip)) {
-      console.log('malvalida IP-adreso');
-    } else {
-      socket = io('http://' + ip + ':' + port);
+    if (ipRegex.test(address) || urlRegex.test(address)) {
+      socket = io('http://' + address + ':' + port);
       socket.on('connect', () => {
         connected = true;
         socket.emit('initialPlayerInfo', playerInfo);
@@ -94,6 +93,8 @@ function connect() {
       socket.on('updatePlayerInfo', data => {
         playerInfo = data;
       });
+    } else {
+      console.log('malvalida adreso');
     }
     main();
   });
@@ -172,7 +173,7 @@ function lookAround() {
 function net_lookArround() {
   socket.emit('get_room', room => {
     socket.emit('get_adjacent_rooms', rooms => {
-      _describeRoom(room,rooms);
+      _describeRoom(room, rooms);
       main();
     });
   });
