@@ -1,7 +1,7 @@
 const http = require('http').createServer();
 const socket = require('socket.io')(http);
 const serverInfo = require('./server.json');
-const port = serverInfo.port;
+const port = process.env.PORT || serverInfo.port;
 const map = require(serverInfo.map);
 
 const players = {};
@@ -22,6 +22,16 @@ socket.on('connection', skt => {
     let playerInfo = players[skt.id];
     let currentRoom = playerInfo.currentRoom;
     let room = map.rooms[currentRoom];
+    room.players = [] //info about the players in the current room
+    //add to room the info about the current players in that room
+    for (const id in players){
+      //loop over the players to check if they are on the same room
+      let player = players[id]
+      if (id !== skt.idi && player.currentRoom === currentRoom){
+        //avoid the current player, who is asking for the info
+        room.players.push[player.name] 
+      }
+    } 
     cb(room);
   });
 
