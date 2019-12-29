@@ -65,16 +65,34 @@ socket.on('connection', skt => {
     }
   });
 
- skt.on('shout', msg => {
+  skt.on('shout', msg => {
     skt.broadcast.emit('shout');
+  });
+
+  skt.on('say', msg => {
+    let currentRoom = players[skt.id].currentRoom
+    let sender = players[skt.id].name
+    //send the message to all the players on the same room
+    for (const id in players) {
+      let player = players[id];
+      if (skt.id !== id){
+        //avoid the same user
+        //check if the player is in the speaker room
+        if(player.currentRoom === currentRoom){
+          socket.to(id).emit('msg',sender,msg)
+        }
+      }
+    }
   });
 
   skt.on('msg', msg => {
     log('incoming msg:', msg);
   });
+
   skt.on('disconnect', evt => {
+    let name = players[skt.id].name;
     players[skt.id] = undefined;
-    log('disconnected', skt.id);
+    log('disconnected', skt.id, name);
   });
 });
 

@@ -38,6 +38,7 @@ const availableCommands = {
   konekti: connect,
   kie: where,
   krii: shout,
+  diru: say,
 };
 
 const availableDirections = {
@@ -100,6 +101,10 @@ function connect() {
           console.log('iu krias en la malproksimo\n');
           main();
         });
+        socket.on('msg', (sender,msg) => {
+          console.log(chalk.yellow(sender+": ")+msg+'\n');
+          main();
+        });
         //change the user info according to server's map
         socket.on('updatePlayerInfo', data => {
           playerInfo = data;
@@ -134,8 +139,8 @@ fs.readFile('./data.sav', 'utf8', (err, content) => {
     }
   } else {
     //TODO: Validate content
-    console.log('Saluton denove ' + content)
-    playerInfo.name = content
+    console.log('Saluton denove ' + content);
+    playerInfo.name = content;
     main();
   }
 });
@@ -153,7 +158,6 @@ function _createSaveFile() {
         main();
       }
     });
-    
   });
 }
 
@@ -267,6 +271,21 @@ function net_shout() {
   socket.emit('shout');
   main();
 }
+
+//this makes the character to talk
+function say() {
+  readline.question(chalk.cyan.italic('kion vi volas diri? '), input => {
+    console.log(chalk.yellow(playerInfo.name+": ") + input)
+    if (connected) return net_say(input);
+    main();
+  });
+}
+
+function net_say(msg){
+  socket.emit('say', msg);
+  main();
+}
+
 
 // This function shows all the objects present in the player's inventory
 function inventory() {
