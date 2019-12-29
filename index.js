@@ -245,15 +245,16 @@ function net_move() {
 
 // This function shows all the objects present in the room
 function lookAround() {
-  if (connected) return net_lookArround();
+  if (connected) return net_lookAround();
   const room = map.rooms[playerInfo.currentRoom];
   _describeRoom(room, map.rooms);
   main();
 }
 
-function net_lookArround() {
+function net_lookAround() {
   socket.emit('get_room', room => {
     socket.emit('get_adjacent_rooms', rooms => {
+      socket.emit('look_around')
       _describeRoom(room, rooms);
       main();
     });
