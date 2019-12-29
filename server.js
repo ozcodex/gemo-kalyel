@@ -27,7 +27,7 @@ socket.on('connection', skt => {
     for (const id in players){
       //loop over the players to check if they are on the same room
       let player = players[id]
-      if (id !== skt.idi && player.currentRoom === currentRoom){
+      if (id !== skt.idi && player && player.currentRoom === currentRoom){
         //avoid the current player, who is asking for the info
         room.players.push[player.name] 
       }
