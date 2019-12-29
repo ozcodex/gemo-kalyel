@@ -79,12 +79,13 @@ function main() {
 
 function connect() {
   //regular expression to validate ip
-  var ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
-  var urlRegex = /^^(([A-z]+)[.-]+)+[A-z]{2,5}$/;
-  readline.question('kiu estas la adreso de la servilo? ', address => {
+  var ipRegex = /^(https?:\/\/)?(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+  var urlRegex = /^(https?:\/\/)(([A-z]+)[.-]+)+[A-z]{2,5}$/;
+  readline.question('kiu estas la adreso kaj haveno de la servilo? ', address => {
     //TODO: check if the port is reachable
+    //TODO: accept different formats
     if (ipRegex.test(address) || urlRegex.test(address)) {
-      socket = io('http://' + address + ':' + port);
+      socket = io(address);
       socket.on('connect', () => {
         connected = true;
         socket.emit('initialPlayerInfo', playerInfo);
