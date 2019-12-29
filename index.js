@@ -1,6 +1,7 @@
 const words = require('./words.json');
 const io = require('socket.io-client');
 const chalk = require('chalk');
+const fs = require('fs');
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -122,12 +123,41 @@ function connect() {
 // ------------------------------------------- //
 
 // Entry Point, where everything starts
-console.log(chalk.bold.red('Bonvenon al la mondo de la gemo de kalyel'))
-readline.question(chalk.cyan.italic('Kiu estas vi? '), name => {
-  console.log('Saluton ' + name + '!');
-  playerInfo.name = name;
-  main();
+console.log(chalk.bold.red('Bonvenon al la mondo de la gemo de kalyel'));
+fs.readFile('./data.sav', 'utf8', (err, content) => {
+  if (err) {
+    if (err.code == 'ENOENT') {
+      _createSaveFile();
+    } else {
+      console.log('File read failed:', err);
+      endGame();
+    }
+  } else {
+    //TODO: Validate content
+    console.log('Saluton denove ' + content)
+    playerInfo.name = content
+    main();
+  }
 });
+
+function _createSaveFile() {
+  readline.question(chalk.cyan.italic('Kiu estas vi? '), name => {
+    content = name;
+    fs.writeFile('./data.sav', content, err => {
+      if (err) {
+        console.log('Error writing file', err);
+        endGame();
+      } else {
+        console.log('Saluton ' + name + '!');
+        playerInfo.name = name;
+        main();
+      }
+    });
+    
+  });
+}
+
+function _loadGame(name) {}
 
 // This function prints the current position of player
 function where() {
@@ -150,32 +180,38 @@ function net_where() {
 // This function moves the player in the given direction
 function move() {
   if (connected) return net_move();
-  readline.question(chalk.cyan.italic('kiu direkto vi volas prenu? '), input => {
-    const direction = availableDirections[input];
-    const room = map.rooms[playerInfo.currentRoom];
-    if (direction && room.ways[direction]) {
-      playerInfo.currentRoom = room.ways[direction];
-      where();
-    } else {
-      console.log('Ne estas vojo en tio direkto!');
-      main();
-    }
-  });
+  readline.question(
+    chalk.cyan.italic('kiu direkto vi volas prenu? '),
+    input => {
+      const direction = availableDirections[input];
+      const room = map.rooms[playerInfo.currentRoom];
+      if (direction && room.ways[direction]) {
+        playerInfo.currentRoom = room.ways[direction];
+        where();
+      } else {
+        console.log('Ne estas vojo en tio direkto!');
+        main();
+      }
+    },
+  );
 }
 
 function net_move() {
-  readline.question(chalk.cyan.italic('kiu direkto vi volas prenu? '), input => {
-    const direction = availableDirections[input];
-    //get rooms
-    socket.emit('move', direction, err => {
-      if (err) {
-        console.log(err);
-        main();
-      } else {
-        net_where();
-      }
-    });
-  });
+  readline.question(
+    chalk.cyan.italic('kiu direkto vi volas prenu? '),
+    input => {
+      const direction = availableDirections[input];
+      //get rooms
+      socket.emit('move', direction, err => {
+        if (err) {
+          console.log(err);
+          main();
+        } else {
+          net_where();
+        }
+      });
+    },
+  );
 }
 
 // This function shows all the objects present in the room
@@ -227,7 +263,7 @@ function shout() {
   main();
 }
 
-function net_shout(){
+function net_shout() {
   socket.emit('shout');
   main();
 }

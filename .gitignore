@@ -106,4 +106,8 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+# Temp vi files
 *.swp
+
+# savefiles
+*.sav
