@@ -59,7 +59,7 @@ function help() {
 
 // Main function, understood the commands
 function main() {
-  readline.question('kion vi volas fari? ', command => {
+  readline.question('kion vi volas fari? \n', command => {
     const action = availableCommands[command];
     if (action) {
       action();
@@ -95,6 +95,10 @@ function connect() {
       socket.on('updatePlayerInfo', data => {
         playerInfo = data;
       });
+      socket.on('disconnect',()=>{
+        console.log('la servilo estis malkonektita')
+        endGame()
+      })
     } else {
       console.log('malvalida adreso');
       main();
@@ -236,4 +240,5 @@ function endGame() {
   if (connected) socket.disconnect();
   console.log('Adiaŭ!');
   readline.close();
+  process.exit()
 }

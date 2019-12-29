@@ -6,32 +6,38 @@ const map = require(serverInfo.map);
 
 const players = {};
 
+const log = (text, ...params) =>
+  console.log(
+    new Date().toLocaleTimeString() + ' - ' + text,
+    params.length == 0 ? '' : params,
+  );
+
 //TODO add checksums
 socket.on('connection', skt => {
-  console.log('connected', skt.id);
+  log('connected', skt.id);
 
   skt.on('initialPlayerInfo', playerInfo => {
     playerInfo.currentRoom = map.default;
     playerInfo.inventory = [];
     skt.emit('updatePlayerInfo', playerInfo);
     players[skt.id] = playerInfo;
-    console.log(`received ${playerInfo.name}'s playerInfo`);
+    log(`received ${playerInfo.name}'s playerInfo`);
   });
 
   skt.on('get_room', cb => {
     let playerInfo = players[skt.id];
     let currentRoom = playerInfo.currentRoom;
     let room = map.rooms[currentRoom];
-    room.players = [] //info about the players in the current room
+    room.players = []; //info about the players in the current room
     //add to room the info about the current players in that room
-    for (const id in players){
+    for (const id in players) {
       //loop over the players to check if they are on the same room
-      let player = players[id]
-      if (id !== skt.id && player && player.currentRoom === currentRoom){
+      let player = players[id];
+      if (id !== skt.id && player && player.currentRoom === currentRoom) {
         //avoid the current player, who is asking for the info
         room.players.push(player.name);
       }
-    } 
+    }
     cb(room);
   });
 
@@ -60,11 +66,11 @@ socket.on('connection', skt => {
   });
 
   skt.on('msg', msg => {
-    console.log('incoming msg:', msg);
+    log('incoming msg:', msg);
   });
   skt.on('disconnect', evt => {
     players[skt.id] = undefined;
-    console.log('disconnected', skt.id);
+    log('disconnected', skt.id);
   });
 });
 
