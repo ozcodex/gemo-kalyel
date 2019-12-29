@@ -1,5 +1,4 @@
 const words = require('./words.json');
-const port = require('./server.json').port;
 const io = require('socket.io-client');
 const readline = require('readline').createInterface({
   input: process.stdin,
@@ -89,6 +88,8 @@ function connect() {
       socket.on('connect', () => {
         connected = true;
         socket.emit('initialPlayerInfo', playerInfo);
+        console.log('Sukcese konektita al servilo');
+        main();
       });
       //change the user info according to server's map
       socket.on('updatePlayerInfo', data => {
@@ -96,8 +97,8 @@ function connect() {
       });
     } else {
       console.log('malvalida adreso');
+      main();
     }
-    main();
   });
 }
 
