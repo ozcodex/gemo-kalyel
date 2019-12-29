@@ -1,5 +1,6 @@
 const words = require('./words.json');
 const io = require('socket.io-client');
+const chalk = require('chalk');
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -60,7 +61,7 @@ function help() {
 
 // Main function, understood the commands
 function main() {
-  readline.question('kion vi volas fari? \n', command => {
+  readline.question(chalk.cyan.italic('kion vi volas fari? \n'), command => {
     const action = availableCommands[command];
     if (action) {
       action();
@@ -82,7 +83,7 @@ function connect() {
   var ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}:[0-9]{2,5}$/;
   var urlRegex = /^(([A-z0-9]+)[.-]?)+\.[A-z]{2,5}:[0-9]{2,5}$/;
   readline.question(
-    'kiu estas la adreso kaj haveno de la servilo? ',
+    chalk.cyan.italic('kiu estas la adreso kaj haveno de la servilo? '),
     address => {
       //TODO: check if the port is reachable
       //TODO: accept different formats
@@ -121,7 +122,8 @@ function connect() {
 // ------------------------------------------- //
 
 // Entry Point, where everything starts
-readline.question('Kiu estas vi? ', name => {
+console.log(chalk.bold.red('Bonvenon al la mondo de la gemo de kalyel'))
+readline.question(chalk.cyan.italic('Kiu estas vi? '), name => {
   console.log('Saluton ' + name + '!');
   playerInfo.name = name;
   main();
@@ -148,7 +150,7 @@ function net_where() {
 // This function moves the player in the given direction
 function move() {
   if (connected) return net_move();
-  readline.question('kiu direkto vi volas prenu? ', input => {
+  readline.question(chalk.cyan.italic('kiu direkto vi volas prenu? '), input => {
     const direction = availableDirections[input];
     const room = map.rooms[playerInfo.currentRoom];
     if (direction && room.ways[direction]) {
@@ -162,7 +164,7 @@ function move() {
 }
 
 function net_move() {
-  readline.question('kiu direkto vi volas prenu? ', input => {
+  readline.question(chalk.cyan.italic('kiu direkto vi volas prenu? '), input => {
     const direction = availableDirections[input];
     //get rooms
     socket.emit('move', direction, err => {
@@ -258,7 +260,7 @@ function takeAllItems() {
 
 function endGame() {
   if (connected) socket.disconnect();
-  console.log('Adiaŭ!');
+  console.log(chalk.red.bold('Adiaŭ!'));
   readline.close();
   process.exit();
 }
