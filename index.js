@@ -198,6 +198,12 @@ function _describeRoom(room, rooms) {
   } else {
     console.log('Estas neniuj eroj en tiu ĉambro!');
   }
+  // if there are players, give a description of the players
+  if (room.players && room.players.length > 0){
+    for (const name of room.players){
+      console.log(name + " estas en ĉi tiu " + room.type);
+    }
+  }
 }
 
 // This function shows all the objects present in the player's inventory
