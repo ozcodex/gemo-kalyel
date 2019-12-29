@@ -28,6 +28,7 @@ socket.on('connection', skt => {
     let playerInfo = players[skt.id];
     let currentRoom = playerInfo.currentRoom;
     let room = map.rooms[currentRoom];
+    room.id = currentRoom;
     room.players = []; //info about the players in the current room
     //add to room the info about the current players in that room
     for (const id in players) {
@@ -66,8 +67,9 @@ socket.on('connection', skt => {
   });
 
   skt.on('shout', msg => {
-    let room = players[skt.id].currentRoom
-    skt.broadcast.emit('shout',room);
+    let currentRoom = players[skt.id].currentRoom
+    const room = map.rooms[currentRoom];
+    skt.broadcast.emit('shout',currentRoom,room.ways);
   });
 
   skt.on('say', msg => {

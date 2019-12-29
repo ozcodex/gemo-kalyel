@@ -48,6 +48,12 @@ const availableDirections = {
   okcidento: 'west',
 };
 
+const _invertedDirections = {
+  north: 'sudo',
+  south: 'nordo',
+  east: 'okcidento',
+  west: 'oriento',
+};
 // This function shows the available commands
 function help() {
   console.log(chalk.bold('Disponeblaj komandoj:'));
@@ -97,12 +103,29 @@ function connect() {
           console.log('Sukcese konektita al servilo');
           main();
         });
-        socket.on('shout', senderRoom => {
-          let distance =
-            (senderRoom === playerInfo.currentRoom ? '' : 'mal') + 'proksime';
-          console.log(`iu krias ${distance}\n`);
-          main();
+        socket.on('shout', (senderRoom, adjacentRooms) => {
+          socket.emit('get_room', currentRoom => {
+            //if you are on the same room
+            if (currentRoom.id === senderRoom) {
+              console.log('iu krias tre proksime\n');
+            } else {
+              //if you are in a contiguos room
+              for (const direction in adjacentRooms) {
+                let roomId = adjacentRooms[direction];
+                if (roomId === currentRoom.id) {
+                  console.log(
+                    `iu krias proksime, en la ${_invertedDirections[direction]}\n`,
+                  );
+                  return main(); //stops and return to menu
+                }
+              }
+            //if you are far away
+             console.log('iu krias en la malproksimo.\n') 
+            }
+            main();
+          });
         });
+
         socket.on('msg', (sender, msg) => {
           console.log(chalk.yellow(sender + ': ') + msg + '\n');
           main();
