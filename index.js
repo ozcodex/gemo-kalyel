@@ -155,6 +155,8 @@ function connect() {
 
 // Entry Point, where everything starts
 console.log(chalk.bold.red('Bonvenon al la mondo de la gemo de kalyel'));
+console.log(chalk.gray.italic('Tio estas unu teksta aventura pri esplorado de majstroj.'))
+console.log(chalk.gray.italic('Se vi bezonas helpon tajpu \'helpi\''))
 fs.readFile('./data.sav', 'utf8', (err, content) => {
   if (err) {
     if (err.code == 'ENOENT') {
