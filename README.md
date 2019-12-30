@@ -16,7 +16,7 @@ the available commands type ´helpi´
 
 By default the game runs on Esperanto, but it is pretty easy to understand.
 
-### Network play
+### Network play
 
 you can connect to a friend's server, or run your own server.
 
