@@ -16,6 +16,7 @@ var playerInfo = {
   name: null,
   currentRoom: map.default,
   inventory: ['scr_0'],
+  visited: [],
 };
 
 // This Object have all the available items
@@ -119,8 +120,8 @@ function connect() {
                   return main(); //stops and return to menu
                 }
               }
-            //if you are far away
-             console.log('iu krias en la malproksimo.\n') 
+              //if you are far away
+              console.log('iu krias en la malproksimo.\n');
             }
             main();
           });
@@ -247,6 +248,13 @@ function net_move() {
 function lookAround() {
   if (connected) return net_lookAround();
   const room = map.rooms[playerInfo.currentRoom];
+  if (playerInfo.visited.indexOf(playerInfo.currentRoom) === -1) {
+    //is the first time in the room
+    room.visited = false;
+    playerInfo.visited.push(playerInfo.currentRoom);
+  } else {
+    room.visited = true;
+  }
   _describeRoom(room, map.rooms);
   main();
 }
@@ -254,7 +262,7 @@ function lookAround() {
 function net_lookAround() {
   socket.emit('get_room', room => {
     socket.emit('get_adjacent_rooms', rooms => {
-      socket.emit('look_around')
+      socket.emit('look_around');
       _describeRoom(room, rooms);
       main();
     });
@@ -262,6 +270,9 @@ function net_lookAround() {
 }
 
 function _describeRoom(room, rooms) {
+  //Tell if the room was previously visited
+  if (room.visited)
+    console.log(chalk.gray('tio ' + room.type + ' ŝajnas konata'));
   // Give a description about the available paths
   for (const direction in room.ways) {
     let target = room.ways[direction];

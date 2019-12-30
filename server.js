@@ -29,6 +29,8 @@ socket.on('connection', skt => {
     let currentRoom = playerInfo.currentRoom;
     let room = map.rooms[currentRoom];
     room.id = currentRoom;
+    //add a flag if the player visited previously the room
+    room.visited = (players[skt.id].visited.indexOf(currentRoom) !== -1)
     room.players = []; //info about the players in the current room
     //add to room the info about the current players in that room
     for (const id in players) {
@@ -54,6 +56,16 @@ socket.on('connection', skt => {
       }
     }
     cb(rooms);
+  });
+
+  skt.on('look_around', ()=>{
+    let playerInfo = players[skt.id];
+    let currentRoom = playerInfo.currentRoom;
+    //check if the room is already visited
+    if (players[skt.id].visited.indexOf(currentRoom) === -1){
+      //Add the room to the visited places.
+      players[skt.id].visited.push(currentRoom);
+    }
   });
 
   skt.on('move', (direction, cb) => {
