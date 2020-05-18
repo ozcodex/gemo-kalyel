@@ -17,6 +17,8 @@ var playerInfo = {
   currentRoom: map.default,
   inventory: ['scr_0'],
   visited: [],
+  hungry: 5, //0: starving, 5: full
+  health: 5, //0: dead 5: healty
 };
 
 // This Object have all the available items
@@ -40,6 +42,7 @@ const availableCommands = {
   kie: where,
   krii: shout,
   diru: say,
+  diagnozo: diagnosis,
 };
 
 const availableDirections = {
@@ -167,6 +170,7 @@ fs.readFile('./data.sav', 'utf8', (err, content) => {
     }
   } else {
     //TODO: Validate content
+    //TODO: update all the data
     console.log('Saluton denove ' + content);
     playerInfo.name = content;
     main();
@@ -336,6 +340,12 @@ function inventory() {
     console.log('Vi ne havas artikolojn en via inventaro');
   }
   main();
+}
+
+//This function gives info about the current status
+function diagnosis() {
+  //TODO: add more messages matching the current status
+  console.log("mi estas tre bone!");
 }
 
 // This function takes all items in the room and appends to player's inventory
