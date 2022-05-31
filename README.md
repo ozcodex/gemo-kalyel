@@ -23,3 +23,8 @@ you can connect to a friend's server, or run your own server.
 to run the server execute `node server`
 
 by default the server listen to the port 9000. you can change that on the config file ´server.json´
+
+
+### TO-DO
+
+map generator (procedural generation)
